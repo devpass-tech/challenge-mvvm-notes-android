@@ -2,6 +2,12 @@
 
 Android application for creating, editing, and deleting personal notes, using Kotlin with Model-View-ViewModel as architecture design.
 
+<p align="center">
+    <img src="screenshots/img.png" width="200" />
+    <img src="screenshots/img_1.png" width="200" />
+    <img src="screenshots/img_2.png" width="200" />
+</p>
+
 # Contributing
 
 1. Fork & clone this repository.
