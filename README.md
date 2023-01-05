@@ -1,7 +1,12 @@
+# MVVM Challenge - Notes App ✒ 
 
-# MVVM Challenge - Notes App 📝
+Android application for creating, editing, and deleting personal notes, using Kotlin with Model-View-ViewModel as architecture design.
 
-In this challenge, we will refactor an Android application that shows SpaceX's upcoming releases to MVVM architecture.
+<p align="center">
+    <img src="screenshots/img.png" width="200" />
+    <img src="screenshots/img_1.png" width="200" />
+    <img src="screenshots/img_2.png" width="200" />
+</p>
 
 # Contributing
 
