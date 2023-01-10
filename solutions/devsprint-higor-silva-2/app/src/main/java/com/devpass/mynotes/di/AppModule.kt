@@ -3,7 +3,6 @@ package com.devpass.mynotes.di
 import android.content.Context
 import androidx.room.Room
 import com.devpass.mynotes.data.NoteDataBase
-import com.devpass.mynotes.data.NotesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,9 +16,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNoteDao(noteDataBase: NoteDataBase): NotesDao {
-        return noteDataBase.getNotesDao()
-    }
+    fun provideNoteDao(noteDataBase: NoteDataBase) = noteDataBase.getNotesDao()
 
     @Provides
     @Singleton

@@ -1,19 +1,14 @@
 package com.devpass.mynotes.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.devpass.mynotes.domain.model.Note
 
 
 @Dao
 interface NotesDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note)
 
     @Delete
@@ -27,8 +22,5 @@ interface NotesDao {
 
     @Query("Select * from note_table order by color ASC")
     fun getAllNotesOrderedByColor(): LiveData<List<Note>>
-
-    @Update
-    suspend fun update(note: Note)
 
 }
