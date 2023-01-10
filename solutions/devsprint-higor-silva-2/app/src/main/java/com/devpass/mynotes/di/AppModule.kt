@@ -3,6 +3,7 @@ package com.devpass.mynotes.di
 import android.content.Context
 import androidx.room.Room
 import com.devpass.mynotes.data.NoteDataBase
+import com.devpass.mynotes.data.repository.NoteRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +17,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNoteDao(noteDataBase: NoteDataBase) = noteDataBase.getNotesDao()
+    fun provideNoteDao(noteDataBase: NoteDataBase) = NoteRepository(noteDataBase.getNotesDao())
 
     @Provides
     @Singleton
