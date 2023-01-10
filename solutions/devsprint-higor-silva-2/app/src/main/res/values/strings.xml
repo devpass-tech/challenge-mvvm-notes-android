@@ -11,4 +11,10 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="txt_notes_title">Title</string>
     <string name="txt_notes_content">Content</string>
+    
+    <!--Filter texts-->
+    <string name="txt_by_title">By title</string>
+    <string name="txt_by_date">By date</string>
+    <string name="txt_by_color">By color</string>
+
 </resources>
