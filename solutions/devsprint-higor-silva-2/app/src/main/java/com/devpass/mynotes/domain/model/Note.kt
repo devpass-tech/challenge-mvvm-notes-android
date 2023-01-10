@@ -1,4 +1,4 @@
-package com.devpass.mynotes.data
+package com.devpass.mynotes.domain.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

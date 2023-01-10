@@ -1,7 +1,7 @@
 package com.devpass.mynotes.data.repository
 
 import androidx.lifecycle.LiveData
-import com.devpass.mynotes.data.Note
+import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.data.NotesDao
 
 class NoteRepository(private val notesDao: NotesDao) {
@@ -18,7 +18,7 @@ class NoteRepository(private val notesDao: NotesDao) {
         notesDao.delete(note)
     }
 
-    suspend fun update(note:Note) {
+    suspend fun update(note: Note) {
         notesDao.update(note)
     }
 }
