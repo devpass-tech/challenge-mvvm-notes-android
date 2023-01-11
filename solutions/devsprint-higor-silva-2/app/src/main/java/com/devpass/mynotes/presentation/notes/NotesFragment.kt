@@ -24,15 +24,14 @@ class NotesFragment : Fragment() {
         layoutFilter = binding.layoutFilter
         btnFilter = binding.btnFilter
 
-        btnFilter.setOnClickListener {
-            if(layoutFilter.visibility == View.GONE){
-                layoutFilter.visibility = View.VISIBLE
-            } else {
-                layoutFilter.visibility = View.GONE
-            }
-        }
+        btnFilter.setOnClickListener { toggleVisibility(layoutFilter) }
 
         return binding.root
+    }
+
+    private fun toggleVisibility(view: View) {
+        view.visibility = if (view.visibility == View.VISIBLE)
+            View.GONE else View.VISIBLE
     }
 
 }
