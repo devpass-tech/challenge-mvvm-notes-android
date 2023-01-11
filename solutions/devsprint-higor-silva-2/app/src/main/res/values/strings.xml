@@ -11,4 +11,9 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="txt_notes_title">Title</string>
     <string name="txt_notes_content">Content</string>
+
+    <!--Undo Snackbar Strings-->
+    <string name="message_note_deleted">Notes deleted</string>
+    <string name="message_undo_delete">Undo</string>
+
 </resources>
