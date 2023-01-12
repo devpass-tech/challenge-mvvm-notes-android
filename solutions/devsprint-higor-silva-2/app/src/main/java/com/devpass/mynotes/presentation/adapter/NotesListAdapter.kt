@@ -3,46 +3,63 @@ package com.devpass.mynotes.presentation.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.devpass.mynotes.R
-import com.devpass.mynotes.domain.model.NoteModel
+import com.devpass.mynotes.databinding.ItemNoteBinding
+import com.devpass.mynotes.domain.model.Note
 
-class NotesListAdapter(private val click: (NoteModel) -> Unit) :
-ListAdapter<NoteModel, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
+class NotesListAdapter(private val click: (Note) -> Unit) :
+    ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
-        return NotesViewHolder.from(parent)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        NotesViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
+        )
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        holder.bind(getItem(position), click)
-    }
 
-    class NotesViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: NoteModel, openNote: ((NoteModel) -> Unit)) {
-            with(itemView) {
-            // on click Note
-            }
-        }
+        holder.apply {
+            val note = getItem(position)
 
-        companion object {
-            fun from(parent: ViewGroup): NotesViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.item_note, parent, false)
-                return NotesViewHolder(view)
+            bind(note)
+
+            noteLayout.setOnClickListener {
+                click(note)
             }
+
         }
     }
 
-    private companion object : DiffUtil.ItemCallback<NoteModel>() {
+    inner class NotesViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemNoteBinding.bind(itemView)
 
-        override fun areItemsTheSame(oldItem: NoteModel, newItem: NoteModel): Boolean {
+        lateinit var noteLayout: ConstraintLayout
+        lateinit var editButton: Button
+        lateinit var deleteButton: Button
+
+        fun bind(data: Note) {
+
+            binding.apply {
+                txtTitleNote.text = data.title
+                txtContentNote.text = data.content
+
+                noteLayout = noteItem
+            }
+        }
+    }
+
+    private companion object : DiffUtil.ItemCallback<Note>() {
+
+        override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: NoteModel, newItem: NoteModel): Boolean {
+        override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
             return oldItem == newItem
         }
     }
