@@ -17,13 +17,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNoteDao(noteDataBase: NoteDataBase) = NoteRepository(noteDataBase.getNotesDao())
+    fun provideNoteRepository(noteDataBase: NoteDataBase): NoteRepository =
+        NoteRepository(noteDataBase.getNotesDao())
 
     @Provides
     @Singleton
     fun provideNoteDatabase(@ApplicationContext appContext: Context) = Room.databaseBuilder(
-            appContext,
-            NoteDataBase::class.java,
-            "note_table"
-        ).build()
+        appContext,
+        NoteDataBase::class.java,
+        "note_table"
+    ).build()
 }
