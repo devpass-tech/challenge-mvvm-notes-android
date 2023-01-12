@@ -10,7 +10,7 @@ import com.devpass.mynotes.R
 import com.devpass.mynotes.domain.model.Note
 
 class NotesListAdapter(private val click: (Note) -> Unit) :
-ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
+    ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         return NotesViewHolder.from(parent)
@@ -23,7 +23,7 @@ ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
     class NotesViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(data: Note, openNote: ((Note) -> Unit)) {
             with(itemView) {
-            // on click Note
+                // on click Note
             }
         }
 
