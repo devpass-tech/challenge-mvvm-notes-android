@@ -16,5 +16,8 @@
     <string name="txt_by_title">By title</string>
     <string name="txt_by_date">By date</string>
     <string name="txt_by_color">By color</string>
+    <string name="editor_fragment_title_hint">Add your title</string>
+    <string name="editor_fragment_content_hint">Add some content for your note</string>
+    <string name="confirm_button_content_description">confirm</string>
 
 </resources>
