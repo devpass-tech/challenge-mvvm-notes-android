@@ -22,16 +22,12 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
         )
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-
         holder.apply {
             val note = getItem(position)
-
             bind(note)
-
             editButton.setOnClickListener {
                 click(note)
             }
-
         }
     }
 
@@ -43,15 +39,12 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
         lateinit var editButton: ImageButton
         lateinit var deleteButton: ImageButton
 
-        fun bind(data: Note) {
-
+        fun bind(data: Note) =
             binding.apply {
                 txtTitleNote.text = data.title
                 txtContentNote.text = data.content
-
                 editButton = imgEdit
             }
-        }
     }
 
     private companion object : DiffUtil.ItemCallback<Note>() {
