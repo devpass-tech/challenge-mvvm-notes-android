@@ -3,35 +3,52 @@ package com.devpass.mynotes.presentation.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.devpass.mynotes.R
+import com.devpass.mynotes.databinding.ItemNoteBinding
 import com.devpass.mynotes.domain.model.Note
 
 class NotesListAdapter(private val click: (Note) -> Unit) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
-        return NotesViewHolder.from(parent)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        NotesViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
+        )
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-        holder.bind(getItem(position), click)
+
+        holder.apply {
+            val note = getItem(position)
+
+            bind(note)
+
+            noteLayout.setOnClickListener {
+                click(note)
+            }
+
+        }
     }
 
-    class NotesViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(data: Note, openNote: ((Note) -> Unit)) {
-            with(itemView) {
-                // on click Note
-            }
-        }
+    inner class NotesViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemNoteBinding.bind(itemView)
 
-        companion object {
-            fun from(parent: ViewGroup): NotesViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.item_note, parent, false)
-                return NotesViewHolder(view)
+        lateinit var noteLayout: ConstraintLayout
+        lateinit var editButton: Button
+        lateinit var deleteButton: Button
+
+        fun bind(data: Note) {
+
+            binding.apply {
+                txtTitleNote.text = data.title
+                txtContentNote.text = data.content
+
+                noteLayout = noteItem
             }
         }
     }
