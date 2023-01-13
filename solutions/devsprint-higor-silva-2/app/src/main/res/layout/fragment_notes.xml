@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:orientation="horizontal"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/rv_list_notes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txt_header_note">
