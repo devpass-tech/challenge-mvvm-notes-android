@@ -14,7 +14,7 @@
     <string name="txt_notes_date">Date</string>
 
     <!--Undo Snackbar Strings-->
-    <string name="message_note_deleted">Notes deleted</string>
+    <string name="message_note_deleted">Note deleted</string>
     <string name="message_undo_delete">Undo</string>
     
     <!--Filter texts-->

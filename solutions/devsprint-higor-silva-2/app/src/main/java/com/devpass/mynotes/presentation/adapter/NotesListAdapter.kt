@@ -3,7 +3,7 @@ package com.devpass.mynotes.presentation.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,7 +12,10 @@ import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.ItemNoteBinding
 import com.devpass.mynotes.domain.model.Note
 
-class NotesListAdapter(private val click: (Note) -> Unit) :
+class NotesListAdapter(
+    private val click: (Note) -> Unit,
+    private val undo: () -> Unit
+) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -31,6 +34,10 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
                 click(note)
             }
 
+            deleteButton.setOnClickListener {
+                undo()
+            }
+
         }
     }
 
@@ -39,8 +46,8 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
         private val binding = ItemNoteBinding.bind(itemView)
 
         lateinit var noteLayout: ConstraintLayout
-        lateinit var editButton: Button
-        lateinit var deleteButton: Button
+        lateinit var editButton: ImageButton
+        lateinit var deleteButton: ImageButton
 
         fun bind(data: Note) {
 
@@ -49,6 +56,7 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
                 txtContentNote.text = data.content
 
                 noteLayout = noteItem
+                deleteButton = imgDelete
             }
         }
     }
