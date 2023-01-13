@@ -10,6 +10,13 @@
         android:name="com.devpass.mynotes.presentation.notes.NotesFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_notes">
+        <action
+            android:id="@+id/action_NotesFragment_to_editorFragment2"
+            app:destination="@id/editorFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/editorFragment2"
+        android:name="com.devpass.mynotes.presentation.editor.EditorFragment"
+        android:label="EditorFragment" />
 
 </navigation>
