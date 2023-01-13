@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -27,7 +28,7 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
 
             bind(note)
 
-            noteLayout.setOnClickListener {
+            editButton.setOnClickListener {
                 click(note)
             }
 
@@ -39,8 +40,8 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
         private val binding = ItemNoteBinding.bind(itemView)
 
         lateinit var noteLayout: ConstraintLayout
-        lateinit var editButton: Button
-        lateinit var deleteButton: Button
+        lateinit var editButton: ImageButton
+        lateinit var deleteButton: ImageButton
 
         fun bind(data: Note) {
 
@@ -48,7 +49,7 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
                 txtTitleNote.text = data.title
                 txtContentNote.text = data.content
 
-                noteLayout = noteItem
+                editButton = imgEdit
             }
         }
     }
