@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.FragmentNotesBinding
+import com.google.android.material.snackbar.Snackbar
 
 class NotesFragment : Fragment() {
 
@@ -43,5 +45,5 @@ class NotesFragment : Fragment() {
         ).setAction(R.string.message_undo_delete) {
 
         }.show()
-    
+    }
 }
