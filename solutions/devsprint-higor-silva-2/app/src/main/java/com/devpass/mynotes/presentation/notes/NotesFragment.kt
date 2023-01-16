@@ -36,7 +36,6 @@ class NotesFragment : Fragment() {
             adapter.submitList(it)
         }
         super.onViewCreated(view, savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -46,21 +45,24 @@ class NotesFragment : Fragment() {
     ): View {
         val binding = FragmentNotesBinding.inflate(inflater, container, false)
 
-        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
-        recyclerView = binding.rvListNotes
-
-        recyclerView.adapter = adapter
-
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        layoutFilter = binding.layoutFilter
-        btnFilter = binding.btnFilter
-
-        btnFilter.setOnClickListener { toggleVisibility(layoutFilter) }
+        setupRecyclerView(binding)
+        setupFilter(binding)
 
         viewModel.getNotes()
-
         return binding.root
+    }
+
+    private fun setupFilter(binding: FragmentNotesBinding) {
+        layoutFilter = binding.layoutFilter
+        btnFilter = binding.btnFilter
+        btnFilter.setOnClickListener { toggleVisibility(layoutFilter) }
+    }
+
+    private fun setupRecyclerView(binding: FragmentNotesBinding) {
+        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
+        recyclerView = binding.rvListNotes
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun toggleVisibility(view: View) {
@@ -76,7 +78,6 @@ class NotesFragment : Fragment() {
     }
 
     private fun showUndoSnackBar() {
-
         Snackbar.make(
             requireView(),
             R.string.message_note_deleted,
