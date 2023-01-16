@@ -1,6 +1,5 @@
 package com.devpass.mynotes.presentation.notes
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,6 +25,7 @@ class NotesViewModel @Inject constructor(
     }
 
     fun undoDelete(){
+        //add note novamente
         deletedNote.value = null
     }
 }

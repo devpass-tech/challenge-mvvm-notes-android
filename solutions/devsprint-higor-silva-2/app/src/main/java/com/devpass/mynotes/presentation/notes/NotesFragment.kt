@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,8 @@ import java.time.Instant
 import java.util.*
 
 class NotesFragment : Fragment() {
+
+    private val viewModel: NotesViewModel by viewModels()
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotesListAdapter
@@ -33,7 +36,7 @@ class NotesFragment : Fragment() {
     ): View {
         val binding = FragmentNotesBinding.inflate(inflater, container, false)
 
-        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
+        adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked)
         recyclerView = binding.rvListNotes
 
         recyclerView.adapter = adapter
@@ -46,6 +49,12 @@ class NotesFragment : Fragment() {
         btnFilter = binding.btnFilter
 
         btnFilter.setOnClickListener { toggleVisibility(layoutFilter) }
+
+        viewModel.deletedNote.observe(viewLifecycleOwner){
+            if(it != null){
+                showUndoSnackBar()
+            }
+        }
 
         return binding.root
     }
@@ -60,6 +69,12 @@ class NotesFragment : Fragment() {
             NotesFragmentDirections.actionNotesFragmentToEditorFragment2()
 
         findNavController().navigate(action)
+    }
+
+    private fun onDeleteButtonClicked(noteDeleted: Note, position: Int){
+        viewModel.deleteNote(noteDeleted)
+
+        adapter.notifyItemRemoved(position)
     }
 
     private fun initializeDummyList() {
@@ -80,7 +95,7 @@ class NotesFragment : Fragment() {
             R.string.message_note_deleted,
             Snackbar.LENGTH_LONG
         ).setAction(R.string.message_undo_delete) {
-
+            viewModel.undoDelete()
         }.show()
     }
 }
