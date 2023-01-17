@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.devpass.mynotes.data.NoteDataBase
 import com.devpass.mynotes.data.repository.NoteRepository
+import com.devpass.mynotes.domain.usecase.AddNoteUseCase
+import com.devpass.mynotes.domain.usecase.NoteUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,4 +29,12 @@ object AppModule {
         NoteDataBase::class.java,
         "note_table"
     ).build()
+
+    @Provides
+    @Singleton
+    fun provideNoteUsecases(repository: NoteRepository): NoteUseCases {
+        return NoteUseCases(
+            addNote = AddNoteUseCase(repository)
+        )
+    }
 }
