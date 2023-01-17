@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.ItemNoteBinding
 import com.devpass.mynotes.domain.model.Note
+import java.text.SimpleDateFormat
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
@@ -48,6 +49,10 @@ class NotesListAdapter(
             binding.apply {
                 txtTitleNote.text = data.title
                 txtContentNote.text = data.content
+
+                val formated = SimpleDateFormat("yyyy.MM.dd HH:mm")
+                txtDateNote.text = formated.format(data.timeStamp)
+
                 editButton = imgEdit
                 deleteButton = imgDelete
             }
