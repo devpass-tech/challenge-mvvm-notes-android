@@ -16,9 +16,11 @@ import com.devpass.mynotes.databinding.FragmentNotesBinding
 import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.presentation.adapter.NotesListAdapter
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.Instant
 import java.util.*
 
+@AndroidEntryPoint
 class NotesFragment : Fragment() {
 
     private val viewModel: NotesViewModel by viewModels()
@@ -29,6 +31,15 @@ class NotesFragment : Fragment() {
     private lateinit var layoutFilter: LinearLayout
     private lateinit var btnFilter: ImageButton
 
+    private val viewModel: NotesViewModel by viewModels()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.observeCurrentList().observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,25 +49,25 @@ class NotesFragment : Fragment() {
 
         adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked)
         recyclerView = binding.rvListNotes
+        
+        setupRecyclerView(binding)
+        setupFilter(binding)
 
-        recyclerView.adapter = adapter
+        viewModel.getNotes()
+        return binding.root
+    }
 
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        initializeDummyList()
-
+    private fun setupFilter(binding: FragmentNotesBinding) {
         layoutFilter = binding.layoutFilter
         btnFilter = binding.btnFilter
-
         btnFilter.setOnClickListener { toggleVisibility(layoutFilter) }
+    }
 
-        viewModel.deletedNote.observe(viewLifecycleOwner){
-            if(it != null){
-                showUndoSnackBar()
-            }
-        }
-
-        return binding.root
+    private fun setupRecyclerView(binding: FragmentNotesBinding) {
+        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
+        recyclerView = binding.rvListNotes
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun toggleVisibility(view: View) {
@@ -66,7 +77,7 @@ class NotesFragment : Fragment() {
 
     private fun onNoteClicked(noteClicked: Note) {
         val action =
-            NotesFragmentDirections.actionNotesFragmentToEditorFragment2()
+            NotesFragmentDirections.actionNotesFragmentToEditorFragment2(noteClicked)
 
         findNavController().navigate(action)
     }
@@ -89,7 +100,6 @@ class NotesFragment : Fragment() {
     }
 
     private fun showUndoSnackBar() {
-
         Snackbar.make(
             requireView(),
             R.string.message_note_deleted,

@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.devpass.mynotes.R
+import java.io.Serializable
 
 @Entity(tableName = "note_table")
 data class Note(
@@ -12,7 +13,7 @@ data class Note(
     @ColumnInfo(name = "content") val content: String,
     @ColumnInfo(name = "color") val color: Int = R.color.yellow,
     @ColumnInfo(name = "time_stamp") val timeStamp: Long
-) {
+): Serializable {
     companion object {
         val noteColors = listOf(
             R.color.yellow, R.color.purple, R.color.orange, R.color.blue, R.color.teal

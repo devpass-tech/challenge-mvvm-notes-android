@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,20 +23,17 @@ class NotesListAdapter(
         )
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-
         holder.apply {
             val note = getItem(position)
-
             bind(note)
 
-            noteLayout.setOnClickListener {
-                click(note)
+            editButton.setOnClickListener {
+                edit(note)
             }
 
             deleteButton.setOnClickListener {
                 deleteNote(note, position)
             }
-
         }
     }
 
@@ -45,20 +41,16 @@ class NotesListAdapter(
         RecyclerView.ViewHolder(itemView) {
         private val binding = ItemNoteBinding.bind(itemView)
 
-        lateinit var noteLayout: ConstraintLayout
         lateinit var editButton: ImageButton
         lateinit var deleteButton: ImageButton
 
-        fun bind(data: Note) {
-
+        fun bind(data: Note) =
             binding.apply {
                 txtTitleNote.text = data.title
                 txtContentNote.text = data.content
-
-                noteLayout = noteItem
+                editButton = imgEdit
                 deleteButton = imgDelete
             }
-        }
     }
 
     private companion object : DiffUtil.ItemCallback<Note>() {
