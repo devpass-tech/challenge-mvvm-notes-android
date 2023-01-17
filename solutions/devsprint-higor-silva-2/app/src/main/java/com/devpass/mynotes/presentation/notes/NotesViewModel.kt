@@ -5,28 +5,41 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devpass.mynotes.domain.exceptions.InvalidNoteException
+import androidx.lifecycle.viewModelScope
 import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.domain.usecase.AddNoteUseCase
 import com.devpass.mynotes.domain.usecase.NoteUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.devpass.mynotes.domain.usecase.NotesManagerUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
-    private val noteUseCases: NoteUseCases
-) : ViewModel(){
+    private val manager: NotesManagerUseCase
+) : ViewModel() {
+
+    private val currentList = MutableLiveData<List<Note>>()
+    fun observeCurrentList(): LiveData<List<Note>> = currentList
 
     var deletedNote = MutableLiveData<Note>()
     private val _snackBar = MutableLiveData<String?>()
     val snackbar: LiveData<String?>
         get() = _snackBar
 
+    init {
+        getNotes()
+    }
 
     fun insertNote(note: Note){
         viewModelScope.launch {
             try {
-                noteUseCases.addNote.invoke(note)
+                manager.addNote.invoke(note)
             } catch (e: InvalidNoteException){
                 _snackBar.value = e.message
             }
@@ -36,5 +49,12 @@ class NotesViewModel @Inject constructor(
     fun onSnackBarShown(){
         _snackBar.value = null
     }
+
+
+    fun getNotes() = manager.getAll().onEach { notes ->
+        currentList.value = notes
+
+    }.launchIn(viewModelScope)
+
 
 }
