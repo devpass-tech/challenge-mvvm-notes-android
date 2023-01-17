@@ -22,7 +22,8 @@
 
         <argument
             android:name="noteClicked"
-            app:argType="com.devpass.mynotes.domain.model.Note"/>
+            app:argType="com.devpass.mynotes.domain.model.Note"
+            app:nullable="true"/>
 
     </fragment>
 
