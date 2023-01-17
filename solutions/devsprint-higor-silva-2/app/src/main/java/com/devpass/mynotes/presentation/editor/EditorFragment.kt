@@ -29,12 +29,12 @@ class EditorFragment : Fragment(){
     ): View {
         binding = FragmentEditorBinding.inflate(inflater, container, false)
 
+        titleEditText = binding.titleEditText
+        contentEditText = binding.contentEditText
+        noteLayout = binding.noteLayout
+
         args.noteClicked?.let {
             val noteClicked = it
-
-            titleEditText = binding.titleEditText
-            contentEditText = binding.contentEditText
-            noteLayout = binding.noteLayout
 
             titleEditText.setText(noteClicked.title)
             contentEditText.setText(noteClicked.content)
