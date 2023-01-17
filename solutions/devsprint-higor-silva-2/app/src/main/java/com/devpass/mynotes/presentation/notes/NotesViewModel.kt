@@ -5,19 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.devpass.mynotes.domain.exceptions.InvalidNoteException
-import androidx.lifecycle.viewModelScope
 import com.devpass.mynotes.domain.model.Note
-import com.devpass.mynotes.domain.usecase.AddNoteUseCase
-import com.devpass.mynotes.domain.usecase.NoteUseCases
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 import com.devpass.mynotes.domain.usecase.NotesManagerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
@@ -39,7 +33,7 @@ class NotesViewModel @Inject constructor(
     fun insertNote(note: Note){
         viewModelScope.launch {
             try {
-                manager.addNote.invoke(note)
+                manager.add.invoke(note)
             } catch (e: InvalidNoteException){
                 _snackBar.value = e.message
             }

@@ -7,8 +7,6 @@ import com.devpass.mynotes.data.repository.NoteRepository
 import com.devpass.mynotes.domain.usecase.AddNoteUseCase
 import com.devpass.mynotes.domain.usecase.GetNotesUseCase
 import com.devpass.mynotes.domain.usecase.NotesManagerUseCase
-import com.devpass.mynotes.domain.usecase.AddNoteUseCase
-import com.devpass.mynotes.domain.usecase.NoteUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -4,26 +4,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.FragmentEditorBinding
+import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.presentation.notes.NotesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EditorFragment : Fragment(){
+class EditorFragment : Fragment() {
 
     private val args: EditorFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentEditorBinding
     val viewModel: NotesViewModel by viewModels()
     var color = R.color.yellow
+    private var noteId: Int? = null
 
     private lateinit var titleEditText: EditText
     private lateinit var contentEditText: EditText
@@ -45,7 +47,9 @@ class EditorFragment : Fragment(){
 
             titleEditText.setText(noteClicked.title)
             contentEditText.setText(noteClicked.content)
-            noteLayout.setBackgroundColor(resources.getColor(noteClicked.color))
+            color = ContextCompat.getColor(requireContext(), R.color.purple)
+            binding.noteLayout.setBackgroundColor(color)
+            noteId = noteClicked.id
         }
 
         viewModel.snackbar.observe(viewLifecycleOwner) { snackBar ->
@@ -99,9 +103,16 @@ class EditorFragment : Fragment(){
         }
 
         binding.confirmButton.setOnClickListener {
-//            viewModel.insertNote(
-//                Note()
-//            )
+            viewModel.insertNote(
+                Note(
+                    title = binding.titleEditText.text.toString(),
+                    content = binding.contentEditText.text.toString(),
+                    color = color,
+                    timeStamp = System.currentTimeMillis(),
+                    id = noteId
+                )
+            )
+            
         }
     }
 }
