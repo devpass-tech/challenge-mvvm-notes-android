@@ -1,5 +1,6 @@
 package com.devpass.mynotes.presentation.notes
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,7 +17,6 @@ class NotesViewModel @Inject constructor(
     private val manager: NotesManagerUseCase
 ) : ViewModel() {
 
-
     var deletedNote = MutableLiveData<Note?>()
 
     private val currentList = MutableLiveData<List<Note>>()
@@ -29,7 +29,7 @@ class NotesViewModel @Inject constructor(
 
     private fun insertNote() = viewModelScope.launch {
         val note = Note(
-            id = 123,
+            id = 1234,
             title = "Nova nota",
             content = "klsdkaslkdlkas",
             color = 0,
@@ -48,12 +48,14 @@ class NotesViewModel @Inject constructor(
         deletedNote.value = note
 
         viewModelScope.launch {
-            deleteNoteUseCase(note)
+            manager.delete(note)
         }
     }
 
     fun undoDelete(){
-        //add note novamente
+        viewModelScope.launch {
+            manager.add(deletedNote.value!!)
+        }
         deletedNote.value = null
     }
 }

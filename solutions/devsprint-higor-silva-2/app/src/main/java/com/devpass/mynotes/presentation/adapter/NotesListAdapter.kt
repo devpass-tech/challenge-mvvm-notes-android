@@ -12,8 +12,8 @@ import com.devpass.mynotes.databinding.ItemNoteBinding
 import com.devpass.mynotes.domain.model.Note
 
 class NotesListAdapter(
-    private val click: (Note) -> Unit,
-    private val deleteNote: (Note, Int) -> Unit
+    private val edit: (Note) -> Unit,
+    private val delete: (Note, Int) -> Unit
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
@@ -32,7 +32,7 @@ class NotesListAdapter(
             }
 
             deleteButton.setOnClickListener {
-                deleteNote(note, position)
+                delete(note, position)
             }
         }
     }

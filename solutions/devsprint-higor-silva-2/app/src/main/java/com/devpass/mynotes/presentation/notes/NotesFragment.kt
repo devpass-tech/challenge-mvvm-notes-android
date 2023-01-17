@@ -31,12 +31,17 @@ class NotesFragment : Fragment() {
     private lateinit var layoutFilter: LinearLayout
     private lateinit var btnFilter: ImageButton
 
-    private val viewModel: NotesViewModel by viewModels()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.observeCurrentList().observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+
+        viewModel.deletedNote.observe(viewLifecycleOwner){
+            if(it != null){
+                showUndoSnackBar()
+            }
+        }
+
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -64,7 +69,7 @@ class NotesFragment : Fragment() {
     }
 
     private fun setupRecyclerView(binding: FragmentNotesBinding) {
-        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
+        adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked)
         recyclerView = binding.rvListNotes
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
