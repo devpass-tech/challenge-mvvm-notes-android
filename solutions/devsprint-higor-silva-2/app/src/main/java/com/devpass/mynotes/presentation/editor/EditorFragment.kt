@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.FragmentEditorBinding
@@ -112,7 +113,7 @@ class EditorFragment : Fragment() {
                     id = noteId
                 )
             )
-            
+            findNavController().popBackStack()
         }
     }
 }
