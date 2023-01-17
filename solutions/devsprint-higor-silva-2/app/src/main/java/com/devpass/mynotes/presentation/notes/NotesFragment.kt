@@ -14,6 +14,7 @@ import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.FragmentNotesBinding
 import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.presentation.adapter.NotesListAdapter
+import com.google.android.material.snackbar.Snackbar
 import java.time.Instant
 import java.util.*
 
@@ -32,7 +33,7 @@ class NotesFragment : Fragment() {
     ): View {
         val binding = FragmentNotesBinding.inflate(inflater, container, false)
 
-        adapter = NotesListAdapter(::onNoteClicked)
+        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
         recyclerView = binding.rvListNotes
 
         recyclerView.adapter = adapter
@@ -70,5 +71,16 @@ class NotesFragment : Fragment() {
         )
 
         adapter.submitList(dummyList)
+    }
+
+    private fun showUndoSnackBar() {
+
+        Snackbar.make(
+            requireView(),
+            R.string.message_note_deleted,
+            Snackbar.LENGTH_LONG
+        ).setAction(R.string.message_undo_delete) {
+
+        }.show()
     }
 }

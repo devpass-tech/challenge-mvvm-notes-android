@@ -3,8 +3,7 @@ package com.devpass.mynotes.presentation.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.ImageButton
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +11,10 @@ import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.ItemNoteBinding
 import com.devpass.mynotes.domain.model.Note
 
-class NotesListAdapter(private val click: (Note) -> Unit) :
+class NotesListAdapter(
+    private val edit: (Note) -> Unit,
+    private val undo: () -> Unit
+) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -21,16 +23,17 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
         )
 
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
-
         holder.apply {
             val note = getItem(position)
-
             bind(note)
 
-            noteLayout.setOnClickListener {
-                click(note)
+            editButton.setOnClickListener {
+                edit(note)
             }
 
+            deleteButton.setOnClickListener {
+                undo()
+            }
         }
     }
 
@@ -38,19 +41,16 @@ class NotesListAdapter(private val click: (Note) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
         private val binding = ItemNoteBinding.bind(itemView)
 
-        lateinit var noteLayout: ConstraintLayout
-        lateinit var editButton: Button
-        lateinit var deleteButton: Button
+        lateinit var editButton: ImageButton
+        lateinit var deleteButton: ImageButton
 
-        fun bind(data: Note) {
-
+        fun bind(data: Note) =
             binding.apply {
                 txtTitleNote.text = data.title
                 txtContentNote.text = data.content
-
-                noteLayout = noteItem
+                editButton = imgEdit
+                deleteButton = imgDelete
             }
-        }
     }
 
     private companion object : DiffUtil.ItemCallback<Note>() {
