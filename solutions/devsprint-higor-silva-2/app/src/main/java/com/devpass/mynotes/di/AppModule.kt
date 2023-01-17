@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import com.devpass.mynotes.data.NoteDataBase
 import com.devpass.mynotes.data.repository.NoteRepository
+import com.devpass.mynotes.domain.usecase.AddNoteUseCase
+import com.devpass.mynotes.domain.usecase.GetNotesUseCase
+import com.devpass.mynotes.domain.usecase.NotesManagerUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,8 +20,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNoteRepository(noteDataBase: NoteDataBase): NoteRepository =
-        NoteRepository(noteDataBase.getNotesDao())
+    fun provideNoteRepository(dataBase: NoteDataBase): NoteRepository =
+        NoteRepository(dataBase.getNotesDao())
 
     @Provides
     @Singleton
@@ -27,4 +30,12 @@ object AppModule {
         NoteDataBase::class.java,
         "note_table"
     ).build()
+
+    @Singleton
+    @Provides
+    fun provideNotesManager(repository: NoteRepository): NotesManagerUseCase =
+        NotesManagerUseCase(
+            add = AddNoteUseCase(repository),
+            getAll = GetNotesUseCase(repository)
+        )
 }
