@@ -72,7 +72,7 @@ class NotesFragment : Fragment() {
 
     private fun onNoteClicked(noteClicked: Note) {
         val action =
-            NotesFragmentDirections.actionNotesFragmentToEditorFragment2()
+            NotesFragmentDirections.actionNotesFragmentToEditorFragment2(noteClicked)
 
         findNavController().navigate(action)
     }

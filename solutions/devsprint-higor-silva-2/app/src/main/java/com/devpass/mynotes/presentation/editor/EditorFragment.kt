@@ -4,14 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.FragmentEditorBinding
 
-class EditorFragment : Fragment() {
+class EditorFragment : Fragment(){
 
+    private val args: EditorFragmentArgs by navArgs()
+    
     private lateinit var binding: FragmentEditorBinding
+
+    private lateinit var titleEditText: EditText
+    private lateinit var contentEditText: EditText
+    private lateinit var noteLayout: LinearLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,6 +28,18 @@ class EditorFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEditorBinding.inflate(inflater, container, false)
+
+        titleEditText = binding.titleEditText
+        contentEditText = binding.contentEditText
+        noteLayout = binding.noteLayout
+
+        args.noteClicked?.let {
+            val noteClicked = it
+
+            titleEditText.setText(noteClicked.title)
+            contentEditText.setText(noteClicked.content)
+            noteLayout.setBackgroundColor(resources.getColor(noteClicked.color))
+        }
 
         return binding.root
     }
