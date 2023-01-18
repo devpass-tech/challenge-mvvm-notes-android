@@ -17,8 +17,6 @@ import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.presentation.adapter.NotesListAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.Instant
-import java.util.*
 
 @AndroidEntryPoint
 class NotesFragment : Fragment() {
@@ -46,16 +44,17 @@ class NotesFragment : Fragment() {
         val binding = FragmentNotesBinding.inflate(inflater, container, false)
 
         setupRecyclerView(binding)
-        setupFilter(binding)
+        setupHeader(binding)
 
         viewModel.getNotes()
         return binding.root
     }
 
-    private fun setupFilter(binding: FragmentNotesBinding) {
+    private fun setupHeader(binding: FragmentNotesBinding) {
         layoutFilter = binding.layoutFilter
         btnFilter = binding.btnFilter
         btnFilter.setOnClickListener { toggleVisibility(layoutFilter) }
+        binding.btnAddNote.setOnClickListener { onNoteClicked(null) }
     }
 
     private fun setupRecyclerView(binding: FragmentNotesBinding) {
@@ -70,7 +69,7 @@ class NotesFragment : Fragment() {
             View.GONE else View.VISIBLE
     }
 
-    private fun onNoteClicked(noteClicked: Note) {
+    private fun onNoteClicked(noteClicked: Note?) {
         val action =
             NotesFragmentDirections.actionNotesFragmentToEditorFragment2(noteClicked)
 
