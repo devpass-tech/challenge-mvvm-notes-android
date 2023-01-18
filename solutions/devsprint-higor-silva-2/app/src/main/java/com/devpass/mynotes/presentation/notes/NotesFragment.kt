@@ -21,18 +21,25 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NotesFragment : Fragment() {
 
+    private val viewModel: NotesViewModel by viewModels()
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotesListAdapter
 
     private lateinit var layoutFilter: LinearLayout
     private lateinit var btnFilter: ImageButton
 
-    private val viewModel: NotesViewModel by viewModels()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.observeCurrentList().observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+
+        viewModel.deletedNote.observe(viewLifecycleOwner){
+            if(it != null){
+                showUndoSnackBar()
+            }
+        }
+
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -43,6 +50,9 @@ class NotesFragment : Fragment() {
     ): View {
         val binding = FragmentNotesBinding.inflate(inflater, container, false)
 
+        adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked)
+        recyclerView = binding.rvListNotes
+        
         setupRecyclerView(binding)
         setupHeader(binding)
 
@@ -58,7 +68,7 @@ class NotesFragment : Fragment() {
     }
 
     private fun setupRecyclerView(binding: FragmentNotesBinding) {
-        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
+        adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked)
         recyclerView = binding.rvListNotes
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -76,13 +86,30 @@ class NotesFragment : Fragment() {
         findNavController().navigate(action)
     }
 
+    private fun onDeleteButtonClicked(noteDeleted: Note, position: Int){
+        viewModel.deleteNote(noteDeleted)
+
+        adapter.notifyItemRemoved(position)
+    }
+
+    private fun initializeDummyList() {
+        val dummyList = listOf(
+            Note(1, "Nota1", "Nota 1 do Higor", R.color.yellow, Date.from(Instant.now()).time),
+            Note(2, "Nota2", "Nota 1 do Higor", R.color.purple, Date.from(Instant.now()).time),
+            Note(3, "Nota3", "Nota 1 do Higor", R.color.blue, Date.from(Instant.now()).time),
+            Note(4, "Nota4", "Nota 1 do Higor", R.color.blue, Date.from(Instant.now()).time)
+        )
+
+        adapter.submitList(dummyList)
+    }
+
     private fun showUndoSnackBar() {
         Snackbar.make(
             requireView(),
             R.string.message_note_deleted,
             Snackbar.LENGTH_LONG
         ).setAction(R.string.message_undo_delete) {
-
+            viewModel.undoDelete()
         }.show()
     }
 }

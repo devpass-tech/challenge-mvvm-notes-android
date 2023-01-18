@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.devpass.mynotes.data.NoteDataBase
 import com.devpass.mynotes.data.repository.NoteRepository
 import com.devpass.mynotes.domain.usecase.AddNoteUseCase
+import com.devpass.mynotes.domain.usecase.DeleteNoteUseCase
 import com.devpass.mynotes.domain.usecase.GetNotesUseCase
 import com.devpass.mynotes.domain.usecase.NotesManagerUseCase
 import dagger.Module
@@ -36,6 +37,7 @@ object AppModule {
     fun provideNotesManager(repository: NoteRepository): NotesManagerUseCase =
         NotesManagerUseCase(
             add = AddNoteUseCase(repository),
-            getAll = GetNotesUseCase(repository)
+            getAll = GetNotesUseCase(repository),
+            delete = DeleteNoteUseCase(repository)
         )
 }
