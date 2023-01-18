@@ -14,7 +14,7 @@ import com.devpass.mynotes.domain.model.Note
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
-    private val undo: () -> Unit,
+    private val delete: (Note, Int) -> Unit,
     private val context: Context
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
@@ -34,7 +34,7 @@ class NotesListAdapter(
             }
 
             deleteButton.setOnClickListener {
-                undo()
+                delete(note, position)
             }
         }
     }
