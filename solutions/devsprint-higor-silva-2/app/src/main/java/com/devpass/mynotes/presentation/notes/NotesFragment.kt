@@ -21,13 +21,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class NotesFragment : Fragment() {
 
+    private val viewModel: NotesViewModel by viewModels()
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotesListAdapter
 
     private lateinit var layoutFilter: LinearLayout
     private lateinit var btnFilter: ImageButton
-
-    private val viewModel: NotesViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.observeCurrentList().observe(viewLifecycleOwner) {
