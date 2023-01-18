@@ -33,6 +33,13 @@ class NotesFragment : Fragment() {
         viewModel.observeCurrentList().observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+
+        viewModel.deletedNote.observe(viewLifecycleOwner) {
+            if (it != null) {
+                showUndoSnackBar()
+            }
+        }
+
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -58,7 +65,7 @@ class NotesFragment : Fragment() {
     }
 
     private fun setupRecyclerView(binding: FragmentNotesBinding) {
-        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
+        adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked)
         recyclerView = binding.rvListNotes
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -82,7 +89,12 @@ class NotesFragment : Fragment() {
             R.string.message_note_deleted,
             Snackbar.LENGTH_LONG
         ).setAction(R.string.message_undo_delete) {
-
+            viewModel.undoDelete()
         }.show()
+    }
+
+    private fun onDeleteButtonClicked(noteDeleted: Note, position: Int){
+        viewModel.deleteNote(noteDeleted)
+        adapter.notifyItemRemoved(position)
     }
 }

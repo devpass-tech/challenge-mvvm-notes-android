@@ -18,37 +18,48 @@ class NotesViewModel @Inject constructor(
     private val manager: NotesManagerUseCase
 ) : ViewModel() {
 
+    private val errorMessage = MutableLiveData<String?>()
+    fun observeErrorMessage(): MutableLiveData<String?> = errorMessage
+
     private val currentList = MutableLiveData<List<Note>>()
     fun observeCurrentList(): LiveData<List<Note>> = currentList
 
-    var deletedNote = MutableLiveData<Note>()
-    private val _snackBar = MutableLiveData<String?>()
-    val snackbar: LiveData<String?>
-        get() = _snackBar
+    var deletedNote = MutableLiveData<Note?>()
 
     init {
         getNotes()
     }
 
-    fun insertNote(note: Note){
+    fun insertNote(note: Note) =
         viewModelScope.launch {
             try {
                 manager.add.invoke(note)
-            } catch (e: InvalidNoteException){
-                _snackBar.value = e.message
+            } catch (e: InvalidNoteException) {
+                errorMessage.value = e.message
             }
+        }
+
+    fun onSnackBarShown() {
+        errorMessage.value = null
+    }
+    fun getNotes() =
+        manager
+            .getAll()
+            .onEach { notes -> currentList.value = notes }
+            .launchIn(viewModelScope)
+
+    fun deleteNote(note: Note) {
+        deletedNote.value = note
+
+        viewModelScope.launch {
+            manager.delete(note)
         }
     }
 
-    fun onSnackBarShown(){
-        _snackBar.value = null
+    fun undoDelete() {
+        viewModelScope.launch {
+            manager.add(deletedNote.value!!)
+        }
+        deletedNote.value = null
     }
-
-
-    fun getNotes() = manager.getAll().onEach { notes ->
-        currentList.value = notes
-
-    }.launchIn(viewModelScope)
-
-
 }
