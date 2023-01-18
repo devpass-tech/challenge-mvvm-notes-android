@@ -17,8 +17,6 @@ import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.presentation.adapter.NotesListAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.Instant
-import java.util.*
 
 @AndroidEntryPoint
 class NotesFragment : Fragment() {
@@ -36,8 +34,8 @@ class NotesFragment : Fragment() {
             adapter.submitList(it)
         }
 
-        viewModel.deletedNote.observe(viewLifecycleOwner){
-            if(it != null){
+        viewModel.deletedNote.observe(viewLifecycleOwner) {
+            if (it != null) {
                 showUndoSnackBar()
             }
         }
@@ -52,20 +50,18 @@ class NotesFragment : Fragment() {
     ): View {
         val binding = FragmentNotesBinding.inflate(inflater, container, false)
 
-        adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked)
-        recyclerView = binding.rvListNotes
-        
         setupRecyclerView(binding)
-        setupFilter(binding)
+        setupHeader(binding)
 
         viewModel.getNotes()
         return binding.root
     }
 
-    private fun setupFilter(binding: FragmentNotesBinding) {
+    private fun setupHeader(binding: FragmentNotesBinding) {
         layoutFilter = binding.layoutFilter
         btnFilter = binding.btnFilter
         btnFilter.setOnClickListener { toggleVisibility(layoutFilter) }
+        binding.btnAddNote.setOnClickListener { onNoteClicked(null) }
     }
 
     private fun setupRecyclerView(binding: FragmentNotesBinding) {
@@ -80,28 +76,11 @@ class NotesFragment : Fragment() {
             View.GONE else View.VISIBLE
     }
 
-    private fun onNoteClicked(noteClicked: Note) {
+    private fun onNoteClicked(noteClicked: Note?) {
         val action =
             NotesFragmentDirections.actionNotesFragmentToEditorFragment2(noteClicked)
 
         findNavController().navigate(action)
-    }
-
-    private fun onDeleteButtonClicked(noteDeleted: Note, position: Int){
-        viewModel.deleteNote(noteDeleted)
-
-        adapter.notifyItemRemoved(position)
-    }
-
-    private fun initializeDummyList() {
-        val dummyList = listOf(
-            Note(1, "Nota1", "Nota 1 do Higor", R.color.yellow, Date.from(Instant.now()).time),
-            Note(2, "Nota2", "Nota 1 do Higor", R.color.purple, Date.from(Instant.now()).time),
-            Note(3, "Nota3", "Nota 1 do Higor", R.color.blue, Date.from(Instant.now()).time),
-            Note(4, "Nota4", "Nota 1 do Higor", R.color.blue, Date.from(Instant.now()).time)
-        )
-
-        adapter.submitList(dummyList)
     }
 
     private fun showUndoSnackBar() {
@@ -112,5 +91,10 @@ class NotesFragment : Fragment() {
         ).setAction(R.string.message_undo_delete) {
             viewModel.undoDelete()
         }.show()
+    }
+
+    private fun onDeleteButtonClicked(noteDeleted: Note, position: Int){
+        viewModel.deleteNote(noteDeleted)
+        adapter.notifyItemRemoved(position)
     }
 }
