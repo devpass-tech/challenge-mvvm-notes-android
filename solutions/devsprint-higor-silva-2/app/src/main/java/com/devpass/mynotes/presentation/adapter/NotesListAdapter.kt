@@ -1,5 +1,6 @@
 package com.devpass.mynotes.presentation.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,8 @@ import com.devpass.mynotes.domain.model.Note
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
-    private val undo: () -> Unit
+    private val undo: () -> Unit,
+    private val context: Context
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
@@ -50,6 +52,8 @@ class NotesListAdapter(
                 txtContentNote.text = data.content
                 editButton = imgEdit
                 deleteButton = imgDelete
+
+                cardViewLayout.setBackgroundColor(context.getColor(data.color))
             }
     }
 

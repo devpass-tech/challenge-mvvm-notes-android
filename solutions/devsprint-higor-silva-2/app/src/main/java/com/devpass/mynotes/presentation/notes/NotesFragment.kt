@@ -59,7 +59,7 @@ class NotesFragment : Fragment() {
     }
 
     private fun setupRecyclerView(binding: FragmentNotesBinding) {
-        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar)
+        adapter = NotesListAdapter(::onNoteClicked, ::showUndoSnackBar, requireContext())
         recyclerView = binding.rvListNotes
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
