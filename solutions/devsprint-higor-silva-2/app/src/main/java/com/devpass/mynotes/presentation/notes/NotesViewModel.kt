@@ -8,7 +8,6 @@ import com.devpass.mynotes.R
 import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.domain.usecase.NotesManagerUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -20,27 +19,48 @@ class NotesViewModel @Inject constructor(
     private val manager: NotesManagerUseCase
 ) : ViewModel() {
 
+    private val errorMessage = MutableLiveData<String?>()
+    fun observeErrorMessage(): MutableLiveData<String?> = errorMessage
+
     private val currentList = MutableLiveData<List<Note>>()
     fun observeCurrentList(): LiveData<List<Note>> = currentList
 
+    var deletedNote = MutableLiveData<Note?>()
+
     init {
-        insertNote()
         getNotes()
     }
 
-    private fun insertNote() = viewModelScope.launch {
-        val note = Note(
-            id = 46,
-            title = "Add your title",
-            content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-            color = R.color.yellow,
-            timeStamp = Date.from(Instant.now()).time,
-        )
-        manager.add(note = note)
+    fun insertNote(note: Note) =
+        viewModelScope.launch {
+            try {
+                manager.add.invoke(note)
+            } catch (e: InvalidNoteException) {
+                errorMessage.value = e.message
+            }
+        }
+
+    fun onSnackBarShown() {
+        errorMessage.value = null
+    }
+    fun getNotes() =
+        manager
+            .getAll()
+            .onEach { notes -> currentList.value = notes }
+            .launchIn(viewModelScope)
+
+    fun deleteNote(note: Note) {
+        deletedNote.value = note
+
+        viewModelScope.launch {
+            manager.delete(note)
+        }
     }
 
-    fun getNotes() = manager.getAll().onEach { notes ->
-        currentList.value = notes
-
-    }.launchIn(viewModelScope)
+    fun undoDelete() {
+        viewModelScope.launch {
+            manager.add(deletedNote.value!!)
+        }
+        deletedNote.value = null
+    }
 }

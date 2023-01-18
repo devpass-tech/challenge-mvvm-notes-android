@@ -4,6 +4,7 @@ package com.devpass.mynotes.domain.usecase
 import com.devpass.mynotes.data.repository.NoteRepository
 import com.devpass.mynotes.domain.exceptions.InvalidNoteException
 import com.devpass.mynotes.domain.model.Note
+import javax.inject.Inject
 
 class AddNoteUseCase(
     private val noteRepository: NoteRepository
