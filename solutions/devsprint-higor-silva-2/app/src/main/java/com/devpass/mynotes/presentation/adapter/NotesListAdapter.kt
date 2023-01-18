@@ -1,5 +1,6 @@
 package com.devpass.mynotes.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,13 +46,14 @@ class NotesListAdapter(
         lateinit var editButton: ImageButton
         lateinit var deleteButton: ImageButton
 
+        @SuppressLint("SimpleDateFormat")
         fun bind(data: Note) =
             binding.apply {
                 txtTitleNote.text = data.title
                 txtContentNote.text = data.content
 
-                val formated = SimpleDateFormat("yyyy.MM.dd HH:mm")
-                txtDateNote.text = formated.format(data.timeStamp)
+                val formatted = SimpleDateFormat("yyyy.MM.dd HH:mm")
+                txtDateNote.text = formatted.format(data.timeStamp)
 
                 editButton = imgEdit
                 deleteButton = imgDelete
