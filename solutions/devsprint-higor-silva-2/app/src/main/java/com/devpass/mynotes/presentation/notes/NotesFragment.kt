@@ -65,7 +65,7 @@ class NotesFragment : Fragment() {
     }
 
     private fun setupRecyclerView(binding: FragmentNotesBinding) {
-        adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked)
+        adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked, requireContext())
         recyclerView = binding.rvListNotes
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())

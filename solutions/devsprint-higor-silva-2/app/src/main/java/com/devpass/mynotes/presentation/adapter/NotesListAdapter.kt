@@ -57,6 +57,8 @@ class NotesListAdapter(
 
                 editButton = imgEdit
                 deleteButton = imgDelete
+
+                cardViewLayout.setBackgroundColor(context.getColor(data.color))
             }
     }
 
