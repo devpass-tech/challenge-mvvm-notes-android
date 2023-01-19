@@ -1,5 +1,6 @@
 package com.devpass.mynotes.presentation.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,8 @@ import java.text.SimpleDateFormat
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
-    private val delete: (Note) -> Unit
+    private val delete: (Note) -> Unit,
+    private val context: Context
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
