@@ -11,11 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.ItemNoteBinding
 import com.devpass.mynotes.domain.model.Note
+import java.text.SimpleDateFormat
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
-    private val delete: (Note, Int) -> Unit,
-    private val context: Context
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
@@ -46,10 +45,15 @@ class NotesListAdapter(
         lateinit var editButton: ImageButton
         lateinit var deleteButton: ImageButton
 
+        @SuppressLint("SimpleDateFormat")
         fun bind(data: Note) =
             binding.apply {
                 txtTitleNote.text = data.title
                 txtContentNote.text = data.content
+
+                val formatted = SimpleDateFormat("yyyy.MM.dd HH:mm")
+                txtDateNote.text = formatted.format(data.timeStamp)
+
                 editButton = imgEdit
                 deleteButton = imgDelete
 
