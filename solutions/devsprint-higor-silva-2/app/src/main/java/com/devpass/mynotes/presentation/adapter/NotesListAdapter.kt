@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
-    private val delete: (Note) -> Unit,
+    private val delete: (Note) -> Unit
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
