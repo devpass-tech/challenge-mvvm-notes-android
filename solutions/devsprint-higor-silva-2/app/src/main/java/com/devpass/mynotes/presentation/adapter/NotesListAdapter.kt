@@ -1,6 +1,6 @@
 package com.devpass.mynotes.presentation.adapter
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
-    private val delete: (Note, Int) -> Unit
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
@@ -57,6 +56,8 @@ class NotesListAdapter(
 
                 editButton = imgEdit
                 deleteButton = imgDelete
+
+                cardViewLayout.setBackgroundColor(context.getColor(data.color))
             }
     }
 
