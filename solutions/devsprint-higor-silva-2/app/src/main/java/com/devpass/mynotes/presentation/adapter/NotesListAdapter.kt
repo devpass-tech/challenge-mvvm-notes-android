@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
+    private val delete: (Note) -> Unit
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
@@ -33,7 +34,7 @@ class NotesListAdapter(
             }
 
             deleteButton.setOnClickListener {
-                delete(note, position)
+                delete(note)
             }
         }
     }
