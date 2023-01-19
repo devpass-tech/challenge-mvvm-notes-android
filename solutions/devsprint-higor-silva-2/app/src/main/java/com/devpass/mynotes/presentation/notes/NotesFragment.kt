@@ -93,8 +93,8 @@ class NotesFragment : Fragment() {
         }.show()
     }
 
-    private fun onDeleteButtonClicked(noteDeleted: Note, position: Int){
+    private fun onDeleteButtonClicked(noteDeleted: Note){
         viewModel.deleteNote(noteDeleted)
-        adapter.notifyItemRemoved(position)
+        viewModel.getNotes()
     }
 }

@@ -1,5 +1,6 @@
 package com.devpass.mynotes.presentation.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,7 @@ import com.devpass.mynotes.domain.model.Note
 
 class NotesListAdapter(
     private val edit: (Note) -> Unit,
-    private val delete: (Note, Int) -> Unit
+    private val delete: (Note) -> Unit,
 ) :
     ListAdapter<Note, NotesListAdapter.NotesViewHolder>(NotesListAdapter) {
 
@@ -32,7 +33,7 @@ class NotesListAdapter(
             }
 
             deleteButton.setOnClickListener {
-                delete(note, position)
+                delete(note)
             }
         }
     }
