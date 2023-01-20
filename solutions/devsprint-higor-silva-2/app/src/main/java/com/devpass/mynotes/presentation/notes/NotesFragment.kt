@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.devpass.mynotes.R
 import com.devpass.mynotes.databinding.FragmentNotesBinding
 import com.devpass.mynotes.domain.model.Note
+import com.devpass.mynotes.domain.util.Filter
 import com.devpass.mynotes.presentation.adapter.NotesListAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +30,10 @@ class NotesFragment : Fragment() {
     private lateinit var layoutFilter: LinearLayout
     private lateinit var btnFilter: ImageButton
 
+    private var selectedFilter: Filter = Filter.Title
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         viewModel.observeCurrentList().observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
@@ -53,7 +57,48 @@ class NotesFragment : Fragment() {
         setupRecyclerView(binding)
         setupHeader(binding)
 
-        viewModel.getNotes()
+        val pref = requireActivity().getSharedPreferences("filter", 0)
+        val editor = pref.edit()
+
+        binding.groupFilter.setOnCheckedChangeListener { radioGroup, _ ->
+
+            when (radioGroup.checkedRadioButtonId) {
+                R.id.sortByTitle -> {
+                    selectedFilter = Filter.Title
+                    viewModel.getNotes(selectedFilter)
+                    editor.putInt("filter", 0)
+                }
+                R.id.sortByDate -> {
+                    selectedFilter = Filter.Date
+                    viewModel.getNotes(selectedFilter)
+                    editor.putInt("filter", 1)
+                }
+                R.id.sortByColor -> {
+                    selectedFilter = Filter.Color
+                    viewModel.getNotes(selectedFilter)
+                    editor.putInt("filter", 2)
+                }
+            }
+
+            editor.apply()
+            setupRecyclerView(binding)
+        }
+
+        when(pref.getInt("filter", 0)){
+            0 -> {
+                binding.sortByTitle.isChecked = true
+                viewModel.getNotes(Filter.Title)
+            }
+            1 -> {
+                binding.sortByDate.isChecked = true
+                viewModel.getNotes(Filter.Date)
+            }
+            2 -> {
+                binding.sortByColor.isChecked = true
+                viewModel.getNotes(Filter.Color)
+            }
+        }
+
         return binding.root
     }
 
@@ -68,6 +113,7 @@ class NotesFragment : Fragment() {
         adapter = NotesListAdapter(::onNoteClicked, ::onDeleteButtonClicked, requireContext())
         recyclerView = binding.rvListNotes
         recyclerView.adapter = adapter
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
@@ -90,11 +136,12 @@ class NotesFragment : Fragment() {
             Snackbar.LENGTH_LONG
         ).setAction(R.string.message_undo_delete) {
             viewModel.undoDelete()
+            viewModel.getNotes(selectedFilter)
         }.show()
     }
 
-    private fun onDeleteButtonClicked(noteDeleted: Note){
+    private fun onDeleteButtonClicked(noteDeleted: Note) {
         viewModel.deleteNote(noteDeleted)
-        viewModel.getNotes()
+        viewModel.getNotes(selectedFilter)
     }
 }
