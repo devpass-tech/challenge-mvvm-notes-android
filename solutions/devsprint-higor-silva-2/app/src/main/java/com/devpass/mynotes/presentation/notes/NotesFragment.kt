@@ -36,6 +36,10 @@ class NotesFragment : Fragment() {
 
         viewModel.observeCurrentList().observe(viewLifecycleOwner) {
             adapter.submitList(it)
+
+            recyclerView.post {
+                recyclerView.scrollToPosition(0)
+            }
         }
 
         viewModel.deletedNote.observe(viewLifecycleOwner) {
@@ -81,7 +85,6 @@ class NotesFragment : Fragment() {
             }
 
             editor.apply()
-            setupRecyclerView(binding)
         }
 
         when(pref.getInt("filter", 0)){
