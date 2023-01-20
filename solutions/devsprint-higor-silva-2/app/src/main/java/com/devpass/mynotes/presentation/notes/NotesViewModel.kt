@@ -5,6 +5,7 @@ import com.devpass.mynotes.domain.exceptions.InvalidNoteException
 import com.devpass.mynotes.R
 import com.devpass.mynotes.domain.model.Note
 import com.devpass.mynotes.domain.usecase.NotesManagerUseCase
+import com.devpass.mynotes.domain.util.Filter
 import com.devpass.mynotes.domain.util.SelfCleaningLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -27,10 +28,6 @@ class NotesViewModel @Inject constructor(
 
     var deletedNote = SelfCleaningLiveData<Note?>()
 
-    init {
-        getNotes()
-    }
-
     fun insertNote(note: Note) =
         viewModelScope.launch {
             try {
@@ -43,9 +40,9 @@ class NotesViewModel @Inject constructor(
     fun onSnackBarShown() {
         errorMessage.value = null
     }
-    fun getNotes() =
+    fun getNotes(filter: Filter) =
         manager
-            .getAll()
+            .getAll(filter)
             .onEach { notes -> currentList.value = notes }
             .launchIn(viewModelScope)
 

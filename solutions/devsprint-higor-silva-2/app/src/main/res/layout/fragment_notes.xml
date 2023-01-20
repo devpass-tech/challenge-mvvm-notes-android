@@ -55,6 +55,7 @@
         app:layout_constraintTop_toBottomOf="@id/txt_header_note">
 
         <RadioGroup
+            android:id="@+id/groupFilter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -86,10 +87,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutFilter"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:itemCount="20" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
